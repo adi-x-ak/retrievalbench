@@ -11,7 +11,14 @@ from pathlib import Path
 
 import numpy as np
 
-from retrievalbench.data import fetch, fingerprint, input_hashes, load_qrels, load_text
+from retrievalbench.data import (
+    development_split,
+    fetch,
+    fingerprint,
+    input_hashes,
+    load_qrels,
+    load_text,
+)
 from retrievalbench.dense import MODEL, REVISION, encode
 from retrievalbench.evaluation import evaluate, paired_interval
 from retrievalbench.fusion import Router, features, positions, rankings, rrf
@@ -77,7 +84,7 @@ def tune(args: argparse.Namespace) -> None:
         raise ValueError("Protocol is already frozen; use a different path for a new study")
     metadata, corpus, queries, arrays = inputs(args)
     docids = metadata["documents"]
-    qrels = load_qrels(args.data, "train")
+    qrels, excluded = development_split(queries, load_qrels(args.data, "train"))
     qids = sorted(qrels)
     texts = [queries[qid] for qid in qids]
     lexical = BM25([corpus[docid] for docid in docids])
@@ -147,6 +154,7 @@ def tune(args: argparse.Namespace) -> None:
         "router": asdict(router) if router else None,
         "development": {
             "queries": len(qids),
+            "excluded_query_ids": excluded,
             "bm25_grid": bm25_grid,
             "dense_grid": dense_grid,
             "rrf_grid": rrf_grid,
@@ -186,7 +194,9 @@ def test(args: argparse.Namespace) -> None:
     if protocol["embeddings_sha256"] != metadata["embeddings_sha256"] and not args.reproduction:
         raise ValueError("Embedding cache does not match the frozen protocol")
     qrels = load_qrels(args.data, "test")
-    train = load_qrels(args.data, "train")
+    train, excluded = development_split(queries, load_qrels(args.data, "train"))
+    if excluded != protocol["development"]["excluded_query_ids"]:
+        raise ValueError("Development exclusions differ from the frozen protocol")
     if set(qrels) & set(train) or {queries[q] for q in qrels} & {queries[q] for q in train}:
         raise ValueError("Development and test queries overlap")
     qids, docids = sorted(qrels), metadata["documents"]

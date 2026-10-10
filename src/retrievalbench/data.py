@@ -59,3 +59,10 @@ def load_qrels(path: Path, split: str) -> dict[str, dict[str, int]]:
 
 def input_hashes(path: Path) -> dict[str, str]:
     return {name: fingerprint(path / name) for name in FILES}
+
+
+def development_split(queries: dict[str, str], qrels: dict) -> tuple[dict, list[str]]:
+    """Exclude exact held-out text duplicates without inspecting held-out labels."""
+    reserved_texts = {text for qid, text in queries.items() if qid not in qrels}
+    excluded = sorted(qid for qid in qrels if queries[qid] in reserved_texts)
+    return {qid: labels for qid, labels in qrels.items() if qid not in excluded}, excluded

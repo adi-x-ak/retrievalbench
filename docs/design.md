@@ -7,6 +7,11 @@ The archive SHA-256 is pinned in `data.py`; decompressed file hashes are stored
 in the frozen protocol. Titles and abstracts are joined with one space. Document
 IDs are sorted lexicographically before indexing. Train labels provide 809
 development queries; the official test split is reserved for final evaluation.
+Two development IDs (`1291`, `871`) have exact text matches among reserved query
+texts. They are excluded from calibration, leaving 807 queries. All 300 official
+test queries remain. Exclusions use text/ID membership without held-out relevance
+labels and are recorded in the protocol. The initial protocol was aborted by the
+overlap guard before scoring; its unmodified contents remain under `protocols/`.
 The pipeline rejects exact query-ID/text overlap between these partitions.
 
 BM25 uses lowercase Unicode word runs, an explicit 33-word stop list, Snowball

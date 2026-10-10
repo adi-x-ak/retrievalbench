@@ -12,7 +12,7 @@ and paired bootstrap intervals. No model API or paid GPU is required.
 
 ## Study
 
-- 5,183 scientific documents; 809 development queries.
+- 5,183 scientific documents; 807 calibration queries after excluding two exact held-out text duplicates.
 - `BAAI/bge-small-en-v1.5`, pinned to a full model revision, CLS pooling, normalized embeddings.
 - BM25 parameters and query instruction selected using development nDCG@10.
 - Fixed fusion tuned over 33 weight/reciprocal-rank-offset combinations.
@@ -21,7 +21,8 @@ and paired bootstrap intervals. No model API or paid GPU is required.
 
 This is **in-domain calibration**, not zero-shot performance. A SciFact result
 does not establish an overall BEIR record. The first test evaluation has not yet
-been performed in this initial protocol-freezing commit.
+been performed. The initial protocol was stopped by the text-overlap check before
+any test score was computed and is archived in `protocols/aborted-overlap.json`.
 
 ## Reproduce
 
