@@ -1,0 +1,76 @@
+{
+  "dataset": "BEIR SciFact official test",
+  "queries": 300,
+  "documents": 5183,
+  "protocol_sha256": "13d442036a9e4a9a61826bd7f610e1e95a9da6b852987203cecc2ba31c701cce",
+  "calibration_embedding_sha256": "529a68e10e5db5de9a964e8bab74e859b776c978ea96313daeb60c5adcfc4ee1",
+  "evaluation_embedding_sha256": "529a68e10e5db5de9a964e8bab74e859b776c978ea96313daeb60c5adcfc4ee1",
+  "python": "3.12.14",
+  "numpy": "2.5.3",
+  "platform": "macOS-15.7.5-arm64-arm-64bit",
+  "metrics": {
+    "bm25": {
+      "ndcg_cut_10": 0.6827158830338065,
+      "recall_100": 0.9208888888888889
+    },
+    "bge_small": {
+      "ndcg_cut_10": 0.7200042547439368,
+      "recall_100": 0.9533333333333334
+    },
+    "weighted_rrf": {
+      "ndcg_cut_10": 0.7339118251977265,
+      "recall_100": 0.9683333333333334
+    },
+    "candidate": {
+      "ndcg_cut_10": 0.7395472739259517,
+      "recall_100": 0.965
+    }
+  },
+  "comparisons": {
+    "bm25": {
+      "mean_delta": 0.05683139089214528,
+      "ci95": [
+        0.032262499037206266,
+        0.08200777235940798
+      ],
+      "samples": 10000,
+      "seed": 42
+    },
+    "bge_small": {
+      "mean_delta": 0.01954301918201485,
+      "ci95": [
+        0.002939431435120821,
+        0.03754523786514027
+      ],
+      "samples": 10000,
+      "seed": 42
+    },
+    "weighted_rrf": {
+      "mean_delta": 0.0056354487282252435,
+      "ci95": [
+        -0.004600882386629766,
+        0.016652416011761827
+      ],
+      "samples": 10000,
+      "seed": 42
+    }
+  },
+  "cost": {
+    "lexical_index_seconds": 0.3352853750002396,
+    "sparse_search_and_sort_seconds": 0.0654314589992282,
+    "dense_cached_dot_and_sort_seconds": 0.07041991699952632,
+    "dense_index_bytes": 7961088,
+    "encoder": {
+      "model": "BAAI/bge-small-en-v1.5",
+      "revision": "5c38ec7c405ec4b44b94cc5a9bb96e735b38267a",
+      "device": "cpu",
+      "max_length": 512,
+      "batch_size": 16,
+      "cpu_threads": 4,
+      "corpus_encoding_seconds": 179.69764849999956,
+      "query_encoding_seconds_both_modes": 4.982752166000864,
+      "dimension": 384,
+      "embeddings_sha256": "529a68e10e5db5de9a964e8bab74e859b776c978ea96313daeb60c5adcfc4ee1"
+    }
+  }
+}

@@ -88,6 +88,9 @@ All methods share the same embedding model and exact dense index. Fusion adds a
 lexical index and query scoring; routing adds seven features and a small matrix
 multiply. There is no cross-encoder, generation model, or model fine-tuning.
 Report corpus encoding separately from query encoding and cached vector search.
+The published encoder ran on an Apple M4 Pro with 24 GiB RAM, macOS 15.7.5,
+Python 3.12.14, PyTorch 2.14.1, Transformers 5.19.0, and four CPU threads.
+The exact dependency environment is in `requirements-repro.txt`.
 Preparing both query modes is development overhead, not per-query deployed cost.
 Stored dense-index bytes exclude model weights and temporary tensors.
 

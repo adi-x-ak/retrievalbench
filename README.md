@@ -12,6 +12,26 @@ and paired bootstrap intervals. No model API or paid GPU is required.
 
 ## Study
 
+On **all 300 official SciFact test queries**, the frozen query router achieved:
+
+| Method | nDCG@10 | Recall@100 |
+|---|---:|---:|
+| Tuned BM25 | 0.6827 | 0.9209 |
+| Development-selected BGE-small | 0.7200 | 0.9533 |
+| Tuned fixed weighted RRF | 0.7339 | **0.9683** |
+| Query-conditioned fusion | **0.7395** | 0.9650 |
+
+The gain over BGE-small is **+0.01954**, with paired bootstrap 95% interval
+**[+0.00294, +0.03755]**. The gain over fixed fusion is +0.00564 with interval
+[-0.00460, +0.01665]; that routing improvement is **inconclusive**. Routing also
+slightly reduces recall@100 relative to fixed fusion. The stronger fixed baseline
+is retained in every report.
+
+Settings were [frozen in Git](https://github.com/adi-x-ak/retrievalbench/commit/81361f1)
+before this test evaluation. Evidence: [protocol](protocol.json),
+[aggregate results](results/evaluation.json), [per-query scores](results/per_query.json),
+and [compressed rankings](results/rankings.json.gz).
+
 - 5,183 scientific documents; 807 calibration queries after excluding two exact held-out text duplicates.
 - `BAAI/bge-small-en-v1.5`, pinned to a full model revision, CLS pooling, normalized embeddings.
 - BM25 parameters and query instruction selected using development nDCG@10.
@@ -20,9 +40,15 @@ and paired bootstrap intervals. No model API or paid GPU is required.
 - Official test labels are consumed only by the separate `test` phase after protocol freezing.
 
 This is **in-domain calibration**, not zero-shot performance. A SciFact result
-does not establish an overall BEIR record. The first test evaluation has not yet
-been performed. The initial protocol was stopped by the text-overlap check before
-any test score was computed and is archived in `protocols/aborted-overlap.json`.
+does not establish an overall BEIR record. The initial protocol was stopped by
+the text-overlap check before any test score was computed and is archived in
+`protocols/aborted-overlap.json`.
+
+Measured on an M4 Pro, 24 GB RAM, CPU: corpus embedding took 179.7 seconds and
+both query modes took 5.0 seconds in total. The dense index occupies 7.96 MB;
+this excludes model weights and the lexical index. Cached vector search is
+reported separately from encoding and is not end-to-end query latency. No paid
+model calls or fine-tuning were used.
 
 ## Reproduce
 
